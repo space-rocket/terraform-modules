@@ -20,7 +20,6 @@ data "aws_acm_certificate" "main" {
 data "aws_acm_certificate" "wildcard" {
   domain      = "*.${var.base_domain}"
   statuses    = ["ISSUED"]
-  types       = ["AMAZON_ISSUED"]
   most_recent = true
 }
 
