@@ -11,8 +11,16 @@ data "aws_acm_certificate" "main" {
 #   most_recent = true
 # }
 
-data "aws_acm_certificate" "additional" {
+# data "aws_acm_certificate" "additional" {
+#   domain      = "*.${var.base_domain}"
+#   statuses    = ["ISSUED"]
+#   most_recent = true
+# }
+# 
+data "aws_acm_certificate" "wildcard" {
   domain      = "*.${var.base_domain}"
   statuses    = ["ISSUED"]
+  types       = ["AMAZON_ISSUED"]
   most_recent = true
 }
+

@@ -4,6 +4,7 @@ output "main_cert_arn" {
 
 output "additional_cert_arns" {
   value = {
-    for domain, cert in data.aws_acm_certificate.additional : domain => cert.arn
+    for domain in var.additional_domains :
+    domain => data.aws_acm_certificate.wildcard.arn
   }
 }
