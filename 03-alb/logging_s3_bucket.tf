@@ -22,8 +22,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs" {
     expiration {
       days = var.logs_expiration
     }
+    filter {}
   }
-  filter {}
+
 }
 
 resource "aws_s3_bucket_ownership_controls" "logs" {
