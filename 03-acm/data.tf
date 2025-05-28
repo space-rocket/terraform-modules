@@ -9,7 +9,7 @@ data "aws_acm_certificate" "main" {
 }
 
 data "aws_acm_certificate" "wildcard" {
-  domain      = "*.dashtwo.space-rocket.com"
+  domain      = "dashtwo.space-rocket.com"
   statuses    = ["ISSUED"]
   most_recent = true
 }
