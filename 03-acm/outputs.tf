@@ -8,3 +8,7 @@ output "additional_cert_arns" {
     domain => data.aws_acm_certificate.wildcard.arn
   }
 }
+
+output "debug_domain" {
+  value = "*.${var.base_domain}"
+}
