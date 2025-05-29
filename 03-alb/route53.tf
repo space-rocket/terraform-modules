@@ -10,7 +10,7 @@ locals {
   ])
 
   alias_fqdns_with_zones = {
-    for alias in var.create_aliases : format("%s.%s", alias["name"], alias["zone"]) => alias["zone"]
+    for alias in var.create_aliases : alias["name"] => alias["zone"]
   }
 }
 
