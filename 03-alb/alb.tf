@@ -50,8 +50,9 @@ resource "aws_lb_listener" "default_app_443" {
   }
 }
 
-resource "aws_lb_listener_certificate" "additional_certs" {
-  for_each        = var.additional_cert_arns
+
+resource "aws_lb_listener_certificate" "additional_cert" {
   listener_arn    = aws_lb_listener.default_app_443.arn
-  certificate_arn = each.value.arn
+  certificate_arn = var.additional_cert_arn
 }
+

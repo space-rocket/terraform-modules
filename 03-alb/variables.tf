@@ -20,6 +20,10 @@ variable "additional_cert_arns" {
   default     = {}
 }
 
+variable "additional_cert_arn" {
+  type = string
+}
+
 
 variable "vpc" {}
 
