@@ -13,5 +13,5 @@
 #   default_tags {
 #     tags = local.common_tags
 #   }
-#   region = var.region
+#   region = var.aws_region
 # }

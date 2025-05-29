@@ -1,6 +1,6 @@
 # ### SSM
 resource "aws_vpc_endpoint" "ssm" {
-  service_name        = "com.amazonaws.${var.region}.ssm"
+  service_name        = "com.amazonaws.${var.aws_region}.ssm"
   vpc_endpoint_type   = "Interface"
   vpc_id              = aws_vpc.main.id
   security_group_ids  = [aws_security_group.ssm-vpc.id]
