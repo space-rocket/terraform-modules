@@ -160,7 +160,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs" {
       days = var.logs_expiration
     }
   }
-
 }
 
 resource "aws_s3_bucket_ownership_controls" "logs" {
@@ -192,14 +191,8 @@ data "aws_iam_policy_document" "alb_logs_s3" {
     resources = ["${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"]
 
     principals {
-      # identifiers = ["arn:aws:iam::${local.lb_account_id}:root"]
-      identifiers = ["elasticloadbalancing.amazonaws.com"]
+      identifiers = ["arn:aws:iam::${local.lb_account_id}:root"]
       type        = "AWS"
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
     }
   }
 
@@ -255,16 +248,6 @@ data "aws_iam_policy_document" "alb_logs_s3" {
       test     = "StringEquals"
       variable = "s3:x-amz-acl"
       values   = ["bucket-owner-full-control"]
-    }
-  }
-
-  statement {
-    sid       = "ALBGetBucketAcl"
-    actions   = ["s3:GetBucketAcl"]
-    resources = [aws_s3_bucket.logs[0].arn]
-    principals {
-      identifiers = ["elasticloadbalancing.amazonaws.com"]
-      type        = "Service"
     }
   }
 }
