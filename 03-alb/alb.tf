@@ -13,6 +13,10 @@ resource "aws_lb" "this" {
     prefix  = var.logs_prefix
   }
 
+  depends_on = [
+    aws_s3_bucket_policy.alb_logs
+  ]
+  
   tags = local.common_tags
 }
 
