@@ -13,7 +13,7 @@ variable "project" {
   description = "Project name"
 }
 
-variable "region" {
+variable "aws_region" {
   type        = string
   description = "AWS Region"
 }
