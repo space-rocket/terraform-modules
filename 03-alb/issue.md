@@ -192,8 +192,14 @@ data "aws_iam_policy_document" "alb_logs_s3" {
     resources = ["${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"]
 
     principals {
-      identifiers = ["arn:aws:iam::${local.lb_account_id}:root"]
+      # identifiers = ["arn:aws:iam::${local.lb_account_id}:root"]
+      identifiers = ["elasticloadbalancing.amazonaws.com"]
       type        = "AWS"
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
     }
   }
 
