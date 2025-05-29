@@ -37,7 +37,7 @@ resource "aws_lb_listener" "default_app_443" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = var.lb_ssl_policy
-  certificate_arn = var.main_cert_arn
+  certificate_arn   = var.main_cert_arn
 
   default_action {
     type = "fixed-response"
@@ -50,9 +50,8 @@ resource "aws_lb_listener" "default_app_443" {
   }
 }
 
-
-resource "aws_lb_listener_certificate" "additional_cert" {
-  listener_arn    = aws_lb_listener.default_app_443.arn
-  certificate_arn = var.additional_cert_arn
-}
-
+# resource "aws_lb_listener_certificate" "additional_certs" {
+#   for_each        = data.aws_acm_certificate.additional
+#   listener_arn    = aws_lb_listener.default_app_443.arn
+#   certificate_arn = each.value.arn
+# }
