@@ -14,11 +14,11 @@ variable "main_cert_arn" {
   type        = string
 }
 
-variable "additional_cert_arns" {
-  description = "Map of additional domain -> ACM ARN"
-  type        = map(string)
-  default     = {}
-}
+# variable "additional_cert_arns" {
+#   description = "Map of additional domain -> ACM ARN"
+#   type        = map(string)
+#   default     = {}
+# }
 
 # variable "additional_cert_arn" {
 #   type = string
