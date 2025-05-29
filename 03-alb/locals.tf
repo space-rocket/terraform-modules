@@ -14,6 +14,6 @@ locals {
     "us-west-1"    = "027434742980"
     "us-west-2"    = "797873946194"
     },
-    var.region
+    var.aws_region
   )
 }
