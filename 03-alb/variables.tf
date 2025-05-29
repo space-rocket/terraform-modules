@@ -46,7 +46,7 @@ variable "logs_prefix" {
 variable "logs_bucket" {
   type        = string
   description = "ALB Logs bucket name"
-  default     = null
+  default     = "LOGS BUCKET NET SET!"
 }
 
 variable "logs_expiration" {

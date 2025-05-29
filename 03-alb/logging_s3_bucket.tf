@@ -114,6 +114,16 @@ data "aws_iam_policy_document" "alb_logs_s3" {
       values   = ["bucket-owner-full-control"]
     }
   }
+
+  statement {
+    sid       = "ALBGetBucketAcl"
+    actions   = ["s3:GetBucketAcl"]
+    resources = [aws_s3_bucket.logs[0].arn]
+    principals {
+      identifiers = ["elasticloadbalancing.amazonaws.com"]
+      type        = "Service"
+    }
+  }
 }
 
 resource "aws_s3_bucket_policy" "alb_logs" {
