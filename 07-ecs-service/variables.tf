@@ -1,0 +1,80 @@
+variable "env" {
+  type = string
+}
+variable "project" {
+  type = string
+}
+variable "region" {
+  type = string
+}
+variable "account_id" {
+  type = string
+}
+
+variable "ecs_cluster_id" {
+  type = string
+}
+variable "ecs_cluster_name" {
+  type = string
+}
+variable "ecs_execution_role" {
+  type = string
+}
+
+variable "app_name" {
+  type = string
+}
+variable "app_image" {
+  type = string
+}
+variable "app_port" {
+  type = number
+}
+variable "app_count" {
+  type = number
+}
+variable "fargate_cpu" {
+  type = number
+}
+variable "fargate_memory" {
+  type = number
+}
+variable "runtime_platform" {
+  type = string
+}
+
+variable "fargate_ecs_task_sg" {
+  # Could be type = string or object(...) if you want.
+}
+variable "fargate_subnets" {
+  # Could be type = list(string) or list(object(...)), etc.
+}
+variable "tg_arn" {
+  type = string
+}
+variable "listener_443_arn" {
+  type = string
+}
+
+variable "ssm_secret_path_prefix" {
+  type = string
+}
+
+variable "app_environments" {
+  description = "List of env vars to inject"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+}
+
+
+variable "app_secrets" {
+  description = "Secrets for ECS container definition"
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  default = []
+}
+

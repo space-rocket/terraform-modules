@@ -1,0 +1,57 @@
+[
+  {
+    "name": "${app_name}",
+    "image": "${app_image}",
+    "memory": ${fargate_memory},
+    "cpu": ${fargate_cpu},
+    "networkMode": "awsvpc",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${app_name}-log-group",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "${app_name}-log-stream"
+      }
+    },
+    "linuxParameters": {
+        "initProcessEnabled": true
+    },
+    "portMappings": [
+      {
+        "hostPort": ${app_port},
+        "containerPort": ${app_port},
+        "protocol": "tcp"
+      }
+    ],
+    "healthCheck": {
+        "command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:${app_port}/"
+        ],
+        "interval": 5,
+        "timeout": 2,
+        "retries": 3
+    },
+    "environment": ${app_environments},
+    "secrets": ${app_secrets},
+    "resourceRequirements": null,
+    "essential": true,
+    "environmentFiles": [],
+    "volumesFrom": null,
+    "hostname": null,
+    "user": null,
+    "workingDirectory": null,
+    "extraHosts": null,
+
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 65536,
+        "hardLimit": 65536
+      }
+    ],
+    "dockerLabels": null,
+    "dependsOn": null,
+    "repositoryCredentials": null
+  }
+]
