@@ -1,3 +1,13 @@
+variable "env" {
+  description = "Environment name (e.g., dev, prod)"
+  type        = string
+}
+
+variable "project" {
+  description = "Project name"
+  type        = string
+}
+
 variable "name_prefix" {
   description = "Prefix for naming resources"
   type        = string
@@ -31,6 +41,11 @@ variable "instance_type" {
 
 variable "key_name" {
   description = "EC2 Key Pair name for SSH access"
+  type        = string
+}
+
+variable "ssh_key_name" {
+  description = "EC2 SSH key pair name"
   type        = string
 }
 
