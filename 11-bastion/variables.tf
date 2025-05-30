@@ -49,11 +49,6 @@ variable "ssh_key_name" {
   type        = string
 }
 
-variable "ssh_key_name" {
-  description = "EC2 SSH key pair name"
-  type        = string
-}
-
 variable "tags" {
   description = "Tags to apply to all resources"
   type        = map(string)
