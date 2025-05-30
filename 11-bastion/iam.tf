@@ -1,0 +1,16 @@
+resource "aws_iam_policy" "bastion_s3_seed_policy" {
+  name = "AllowS3DocdbSeedRead"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject"
+        ],
+        "Resource": "arn:aws:s3:::${local.env}-${local.project}-seed-bucket/*"
+      }
+    ]
+  })
+}
