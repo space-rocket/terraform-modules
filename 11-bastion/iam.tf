@@ -9,7 +9,7 @@ resource "aws_iam_policy" "bastion_s3_seed_policy" {
         Action = [
           "s3:GetObject"
         ],
-        "Resource": "arn:aws:s3:::${local.env}-${local.project}-seed-bucket/*"
+        Resource = "arn:aws:s3:::${var.env}-${var.project}-seed-bucket/*"
       }
     ]
   })
