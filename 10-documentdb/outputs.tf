@@ -12,3 +12,14 @@ output "cluster_id" {
   description = "DocumentDB cluster ID"
   value       = aws_docdb_cluster.this.id
 }
+
+output "master_username" {
+  description = "DocumentDB master username"
+  value       = var.master_username
+}
+
+output "master_password" {
+  description = "DocumentDB master password"
+  value       = var.master_password
+  sensitive   = true
+}
