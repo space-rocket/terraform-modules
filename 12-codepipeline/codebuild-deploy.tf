@@ -55,7 +55,7 @@ resource "aws_codebuild_project" "deploy" {
         pre_build:
           commands:
             - echo 👉 AWS_DEFAULT_REGION $AWS_DEFAULT_REGION
-            - IMAGE_TAG=$(cat backend_image_tag.txt)
+            - IMAGE_TAG=$(cat image_tag.txt)
             - echo 👍 IMAGE_TAG $IMAGE_TAG
             - |
               aws ecs register-task-definition \
@@ -151,7 +151,7 @@ resource "aws_codebuild_project" "deploy" {
         files:
           - ecs-task-definition.json
           - ecs-service-update.json
-          - backend_image_tag.txt 
+          - image_tag.txt 
           - revision_number.txt          
     EOT
   }

@@ -52,23 +52,23 @@ variable "git_repo" {
 #   description = "The subdomain domain name for the frontend app, ex: app in app.example.com"
 # }
 
-variable "frontend_git_branch" {
-  description = "The branch to trigger CI/CD pipeline, ex: main"
-  type        = string
-  default     = "main"
-}
+# variable "frontend_git_branch" {
+#   description = "The branch to trigger CI/CD pipeline, ex: main"
+#   type        = string
+#   default     = "main"
+# }
 
-variable "frontend_git_repo" {
-  description = "The org's Github repo for the frontend app, ex: Spoon/Knife"
-  type        = string
-  default     = "Spoon/Knife"
-}
-
-# variable "backend_image_repo" {
-#   description = "The ecr repo, ex: Spoon/Knife"
+# variable "frontend_git_repo" {
+#   description = "The org's Github repo for the frontend app, ex: Spoon/Knife"
 #   type        = string
 #   default     = "Spoon/Knife"
 # }
+
+variable "image_repo" {
+  description = "The ecr repo, ex: Spoon/Knife"
+  type        = string
+  default     = "Spoon/Knife"
+}
 
 variable "project" {
   description = "Project name"
