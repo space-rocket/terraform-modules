@@ -28,7 +28,7 @@ variable "env" {
 variable "git_branch" {
   description = "The branch to trigger CI/CD pipeline, ex: main"
   type        = string
-  default     = "main"
+  default     = "cicd"
 }
 
 variable "git_repo" {

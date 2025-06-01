@@ -27,7 +27,7 @@ resource "aws_codepipeline" "codepipeline" {
       configuration = {
         ConnectionArn        = aws_codestarconnections_connection.github_connection.arn
         FullRepositoryId     = "${local.git_repo}"
-        BranchName           = "${local.env}"
+        BranchName           = "${local.git_branch}"
         OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
