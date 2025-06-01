@@ -37,11 +37,12 @@ variable "git_repo" {
   default     = "Spoon/Knife"
 }
 
-# variable "b_ackend_port" {
-#   description = "The port the backend service listens on, ex: 5000"
-#   type        = number
-#   default     = 5000
-# }
+variable "port" {
+  description = "The port the backend service listens on, ex: 5000"
+  type        = number
+  default     = 5000
+}
+
 # variable "frontend_app_name" {
 #   type        = string
 #   description = "The frontend app name, ex: example-frontend"
