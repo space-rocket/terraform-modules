@@ -2,7 +2,7 @@ locals {
   account_id                 = var.account_id
   project                    = var.project
   environment                = var.env
-  region                     = local.region
+  region                     = var.region
   name                       = "${var.project}-${var.env}-${var.app_name}"
   git_repo                   = var.git_repo
   ecs_cluster_name           = var.ecs_cluster_name
