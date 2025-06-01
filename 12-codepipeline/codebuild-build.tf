@@ -26,7 +26,7 @@ resource "aws_codebuild_project" "build" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = var.backend_image_repo
+      value = local.image_repo
     }
   }
 
@@ -79,10 +79,10 @@ resource "aws_codebuild_project" "build" {
             - echo 💧
             - echo $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
             - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-            - echo $IMAGE_TAG > backend_image_tag.txt
+            - echo $IMAGE_TAG > image_tag.txt
       artifacts:
         files:
-          - backend_image_tag.txt
+          - image_tag.txt
 
     EOT
   }

@@ -2,6 +2,8 @@ locals {
   account_id                 = var.account_id
   project                    = var.project
   environment                = var.env
+  env                        = var.env
+  app_name                   = var.app_name
   region                     = var.region
   name                       = "${var.project}-${var.env}-${var.app_name}"
   git_repo                   = var.git_repo
@@ -10,11 +12,8 @@ locals {
   fargate_ecs_task_role      = var.fargate_ecs_task_role
   fargate_ecs_execution_role = var.fargate_ecs_execution_role
   image_repo                 = var.image_repo
-
-
-  app_name               = var.app_name
-  port                   = var.port
-  ssm_secret_path_prefix = var.ssm_secret_path_prefix
+  port                       = var.port
+  ssm_secret_path_prefix     = var.ssm_secret_path_prefix
 
   common_tags = {
     project     = local.project
