@@ -63,7 +63,7 @@ resource "aws_codebuild_project" "deploy" {
                 --task-role-arn arn:aws:iam::${local.account_id}:role/${local.fargate_ecs_task_role} \
                 --execution-role-arn ${local.fargate_ecs_execution_role} \
                 --container-definitions '[{
-                    "name": "${local.task_name}-container-name",
+                    "name": "${local.task_name}",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
                     "memory": 512,
                     "cpu": 256,
