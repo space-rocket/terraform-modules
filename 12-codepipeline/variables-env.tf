@@ -104,7 +104,12 @@ variable "fargate_ecs_execution_role" {
   type        = string
 }
 
-variable "app_name" {
+# variable "app_name" {
+#   description = "Application name used in CodePipeline and tagging"
+#   type        = string
+# }
+
+variable "task_name" {
   description = "Application name used in CodePipeline and tagging"
   type        = string
 }

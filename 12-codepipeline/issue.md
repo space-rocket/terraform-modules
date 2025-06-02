@@ -162,7 +162,7 @@ resource "aws_codebuild_project" "deploy" {
                 --task-role-arn arn:aws:iam::${local.account_id}:role/${local.fargate_ecs_task_role} \
                 --execution-role-arn ${local.fargate_ecs_execution_role} \
                 --container-definitions '[{
-                    "name": "${local.app_name}",
+                    "name": "${local.name}",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
                     "memory": 512,
                     "cpu": 256,
@@ -184,22 +184,7 @@ resource "aws_codebuild_project" "deploy" {
                             "value": "${local.region}"
                         }
                     ],
-                    "secrets": [
-                      { "name" : "OPENAI_API_KEY", "valueFrom" : "${local.ssm_secret_path_prefix}/OPENAI_API_KEY" },
-                      { "name" : "BROKER_ANALYTICS", "valueFrom" : "${local.ssm_secret_path_prefix}/BROKER_ANALYTICS" },
-                      { "name" : "DEBUG", "valueFrom" : "${local.ssm_secret_path_prefix}/DEBUG" },
-                      { "name" : "CACHING_ENABLED", "valueFrom" : "${local.ssm_secret_path_prefix}/CACHING_ENABLED" },
-                      { "name" : "ALLOWED_ORIGINS", "valueFrom" : "${local.ssm_secret_path_prefix}/ALLOWED_ORIGINS" },
-                      { "name" : "ALLOWED_METHODS", "valueFrom" : "${local.ssm_secret_path_prefix}/ALLOWED_METHODS" },
-                      { "name" : "ALLOWED_HEADERS", "valueFrom" : "${local.ssm_secret_path_prefix}/ALLOWED_HEADERS" },
-                      { "name" : "SURREAL_HOST", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_HOST" },
-                      { "name" : "SURREAL_NAMESPACE", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_NAMESPACE" },
-                      { "name" : "SURREAL_DATABASE", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_DATABASE" },
-                      { "name" : "SURREAL_USERNAME", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_USERNAME" },
-                      { "name" : "SURREAL_PASSWORD", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_PASSWORD" },
-                      { "name" : "CLERK_API_URL", "valueFrom" : "${local.ssm_secret_path_prefix}/CLERK_API_URL" },
-                      { "name" : "CLERK_PUBLISHABLE_KEY", "valueFrom" : "${local.ssm_secret_path_prefix}/CLERK_PUBLISHABLE_KEY" }
-                    ],
+                    "secrets": ${jsonencode(local.app_secrets)},
                     "ulimits": [
                         {
                             "name": "nofile",
@@ -585,7 +570,7 @@ locals {
   image_repo                 = var.image_repo
   port                       = var.port
   ssm_secret_path_prefix     = var.ssm_secret_path_prefix
-
+  app_secrets                = var.app_secrets
   common_tags = {
     project     = local.project
     environment = local.environment
@@ -725,6 +710,15 @@ variable "app_name" {
   description = "Application name used in CodePipeline and tagging"
   type        = string
 }
+
+variable "app_secrets" {
+  description = "List of secret objects with name and valueFrom"
+  type        = list(object({
+    name      = string
+    valueFrom = string
+  }))
+}
+
 
 ```
 
