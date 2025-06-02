@@ -1,8 +1,8 @@
-**codebuild-build.tf**
+**modules/12-codepipeline/codebuild-build.tf**
 ```tf
 resource "aws_codebuild_project" "build" {
-  name          = "${local.name}-codebuild-build-project"
-  description   = "${local.name} Codebuild Build Project"
+  name          = "${local.task_name}"
+  description   = "${local.task_name} Codebuild Build Project"
   build_timeout = 5
   service_role  = aws_iam_role.code_build_role.arn
 
@@ -34,8 +34,8 @@ resource "aws_codebuild_project" "build" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "log-group-from-build"
-      stream_name = "log-stream-from-build"
+      group_name  = local.log_group_name
+      stream_name = local.task_name
     }
 
     s3_logs {
@@ -95,11 +95,11 @@ resource "aws_codebuild_project" "build" {
 }
 ```
 
-**codebuild-deploy.tf**
+**modules/12-codepipeline/codebuild-deploy.tf**
 ```tf
 resource "aws_codebuild_project" "deploy" {
-  name          = "${local.name}-codebuild-deploy-project"
-  description   = "${local.name} Codebuild Deploy Project"
+  name          = "${local.task_name}-codebuild-deploy-project"
+  description   = "${local.task_name} Codebuild Deploy Project"
   build_timeout = 5
   service_role  = aws_iam_role.code_build_role.arn
 
@@ -127,8 +127,8 @@ resource "aws_codebuild_project" "deploy" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "log-group-from-deploy"
-      stream_name = "log-stream-from-deploy"
+      group_name  = local.log_group_name
+      stream_name = local.task_name
     }
 
     s3_logs {
@@ -158,11 +158,11 @@ resource "aws_codebuild_project" "deploy" {
             - echo 👍 IMAGE_TAG $IMAGE_TAG
             - |
               aws ecs register-task-definition \
-                --family ${local.name} \
+                --family "${local.task_name}" \
                 --task-role-arn arn:aws:iam::${local.account_id}:role/${local.fargate_ecs_task_role} \
                 --execution-role-arn ${local.fargate_ecs_execution_role} \
                 --container-definitions '[{
-                    "name": "${local.name}",
+                    "name": "${local.task_name}",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
                     "memory": 512,
                     "cpu": 256,
@@ -195,9 +195,9 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.env}-${local.project}-${local.app_name}-log-group",
+                            "awslogs-group": "${local.log_group_name}",
                             "awslogs-region": "${local.region}",
-                            "awslogs-stream-prefix": "${local.env}-${local.project}-${local.app_name}-log-stream"
+                            "awslogs-stream-prefix": "${local.task_name}"
                         }
                     },
                     "healthCheck": {
@@ -226,7 +226,7 @@ resource "aws_codebuild_project" "deploy" {
                 --cluster ${local.ecs_cluster_name} \
                 --service ${local.ecs_service_name} \
                 --force-new-deployment \
-                --task-definition ${local.name}:$REVISION_NUMBER > ecs-service-update.json
+                --task-definition ${local.task_name}:$REVISION_NUMBER > ecs-service-update.json
         post_build:
           commands:
             - echo "🏁 Post-build phase complete! All artifacts are ready and verified."
@@ -246,7 +246,7 @@ resource "aws_codebuild_project" "deploy" {
 }
 ```
 
-**codebuild-iam-policy-and-role.tf**
+**modules/12-codepipeline/codebuild-iam-policy-and-role.tf**
 ```tf
 data "aws_iam_policy_document" "codebuild_assume_role" {
   statement {
@@ -261,7 +261,7 @@ data "aws_iam_policy_document" "codebuild_assume_role" {
 }
 
 resource "aws_iam_role" "code_build_role" {
-  name               = "${local.name}-codebuild-role"
+  name               = "${local.task_name}-codebuild-role"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role.json
 }
 
@@ -374,7 +374,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
   policy = data.aws_iam_policy_document.codebuild_policy_document.json
 }```
 
-**codepipeline-iam-policy-and-role.tf**
+**modules/12-codepipeline/codepipeline-iam-policy-and-role.tf**
 ```tf
 data "aws_iam_policy_document" "codepipeline_assume_role" {
   statement {
@@ -390,7 +390,7 @@ data "aws_iam_policy_document" "codepipeline_assume_role" {
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name               = "${local.name}-codepipeline-role"
+  name               = "${local.task_name}-codepipeline-role"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_assume_role.json
 }
 
@@ -452,10 +452,10 @@ resource "aws_iam_role_policy" "codepipeline_role_policy" {
 }
 ```
 
-**codepipeline.tf**
+**modules/12-codepipeline/codepipeline.tf**
 ```tf
 resource "aws_codepipeline" "codepipeline" {
-  name          = "${local.name}-codepipeline"
+  name          = "${local.task_name}-codepipeline"
   role_arn      = aws_iam_role.codepipeline_role.arn
   pipeline_type = "V2"
 
@@ -502,7 +502,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${local.name}-codebuild-build-project"
+        ProjectName = "${local.task_name}"
       }
     }
   }
@@ -520,21 +520,21 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${local.name}-codebuild-deploy-project"
+        ProjectName = "${local.task_name}-codebuild-deploy-project"
       }
     }
   }
 }
 ```
 
-**github-connection.tf**
+**modules/12-codepipeline/github-connection.tf**
 ```tf
 resource "aws_codestarconnections_connection" "github_connection" {
-  name          = "${local.app_name}-${local.env}"
+  name          = "${local.task_name}-${local.env}"
   provider_type = "GitHub"
 }```
 
-**kms-key.tf**
+**modules/12-codepipeline/kms-key.tf**
 ```tf
 resource "aws_kms_key" "s3kmskey" {
   description             = "KMS key for S3 bucket encryption"
@@ -543,7 +543,7 @@ resource "aws_kms_key" "s3kmskey" {
 }
 
 resource "aws_kms_alias" "s3kmskey" {
-  name          = "alias/${local.name}-kms-key"
+  name          = "alias/${local.task_name}-kms-key"
   target_key_id = aws_kms_key.s3kmskey.id
 }
 
@@ -551,16 +551,18 @@ data "aws_kms_alias" "s3kmskey" {
   name = aws_kms_alias.s3kmskey.name
 }```
 
-**local-values.tf**
+**modules/12-codepipeline/local-values.tf**
 ```tf
 locals {
   account_id                 = var.account_id
   project                    = var.project
   environment                = var.env
   env                        = var.env
-  app_name                   = var.app_name
+  # app_name                   = var.app_name
+  task_name                  = var.task_name
+  log_group_name             = var.log_group_name
   region                     = var.region
-  name                       = "${var.project}-${var.env}-${var.app_name}"
+  # name                       = "${var.project}-${var.env}-${var.app_name}"
   git_repo                   = var.git_repo
   git_branch                 = var.git_branch
   ecs_cluster_name           = var.ecs_cluster_name
@@ -578,10 +580,10 @@ locals {
 }
 ```
 
-**s3-bucket.tf**
+**modules/12-codepipeline/s3-bucket.tf**
 ```tf
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "${local.name}-codepipeline"
+  bucket = "${local.task_name}-codepipeline"
 }
 
 resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
@@ -598,7 +600,7 @@ resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
 #   max = 9999999
 # }```
 
-**variables-env.tf**
+**modules/12-codepipeline/variables-env.tf**
 ```tf
 variable "account_id" {
   type        = string
@@ -706,9 +708,18 @@ variable "fargate_ecs_execution_role" {
   type        = string
 }
 
-variable "app_name" {
+# variable "app_name" {
+#   description = "Application name used in CodePipeline and tagging"
+#   type        = string
+# }
+
+variable "task_name" {
   description = "Application name used in CodePipeline and tagging"
   type        = string
+}
+
+variable "log_group_name" {
+  type = string
 }
 
 variable "app_secrets" {

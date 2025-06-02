@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the directory prefix to prepend to file names in the output
-prefix_path="modules/12-codepipeline"
+prefix_path="modules/07-ecs-service"
 
 # Define the output file
 output_file="issue.md"
