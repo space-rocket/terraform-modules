@@ -85,22 +85,7 @@ resource "aws_codebuild_project" "deploy" {
                             "value": "${local.region}"
                         }
                     ],
-                    "secrets": [
-                      { "name" : "OPENAI_API_KEY", "valueFrom" : "${local.ssm_secret_path_prefix}/OPENAI_API_KEY" },
-                      { "name" : "BROKER_ANALYTICS", "valueFrom" : "${local.ssm_secret_path_prefix}/BROKER_ANALYTICS" },
-                      { "name" : "DEBUG", "valueFrom" : "${local.ssm_secret_path_prefix}/DEBUG" },
-                      { "name" : "CACHING_ENABLED", "valueFrom" : "${local.ssm_secret_path_prefix}/CACHING_ENABLED" },
-                      { "name" : "ALLOWED_ORIGINS", "valueFrom" : "${local.ssm_secret_path_prefix}/ALLOWED_ORIGINS" },
-                      { "name" : "ALLOWED_METHODS", "valueFrom" : "${local.ssm_secret_path_prefix}/ALLOWED_METHODS" },
-                      { "name" : "ALLOWED_HEADERS", "valueFrom" : "${local.ssm_secret_path_prefix}/ALLOWED_HEADERS" },
-                      { "name" : "SURREAL_HOST", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_HOST" },
-                      { "name" : "SURREAL_NAMESPACE", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_NAMESPACE" },
-                      { "name" : "SURREAL_DATABASE", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_DATABASE" },
-                      { "name" : "SURREAL_USERNAME", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_USERNAME" },
-                      { "name" : "SURREAL_PASSWORD", "valueFrom" : "${local.ssm_secret_path_prefix}/SURREAL_PASSWORD" },
-                      { "name" : "CLERK_API_URL", "valueFrom" : "${local.ssm_secret_path_prefix}/CLERK_API_URL" },
-                      { "name" : "CLERK_PUBLISHABLE_KEY", "valueFrom" : "${local.ssm_secret_path_prefix}/CLERK_PUBLISHABLE_KEY" }
-                    ],
+                    "secrets": ${jsonencode(local.app_secrets)},
                     "ulimits": [
                         {
                             "name": "nofile",
