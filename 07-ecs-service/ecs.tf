@@ -8,7 +8,7 @@ locals {
   app_config = templatefile(
     local.app_template_path,
     {
-      app_name         = var.app_name
+      task_name        = var.task_name
       app_image        = var.app_image
       app_port         = var.app_port
       app_env          = var.env
@@ -24,7 +24,7 @@ locals {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = var.app_name
+  family                   = var.task_name
   container_definitions    = local.app_config
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "app" {
 # ECS Service
 ########################
 resource "aws_ecs_service" "ecs_app_service" {
-  name                   = "${var.app_name}-fargate-service"
+  name                   = "${var.task_name}-fargate-service"
   cluster                = var.ecs_cluster_id
   task_definition        = aws_ecs_task_definition.app.arn
   desired_count          = var.app_count
@@ -68,7 +68,7 @@ resource "aws_ecs_service" "ecs_app_service" {
 
   load_balancer {
     target_group_arn = var.tg_arn
-    container_name   = var.app_name
+    container_name   = var.task_name
     container_port   = var.app_port
   }
 

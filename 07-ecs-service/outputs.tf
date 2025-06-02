@@ -7,7 +7,7 @@ output "ecs_task_role_name" {
   description = "The name of the ECS task role."
 }
 
-output "app_name" {
-  value       = var.app_name
+output "task_name" {
+  value       = var.task_name
   description = "The name of the app that this service deploys."
 }

@@ -21,7 +21,7 @@ variable "ecs_execution_role" {
   type = string
 }
 
-variable "app_name" {
+variable "task_name" {
   type = string
 }
 variable "app_image" {

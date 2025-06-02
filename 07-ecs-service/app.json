@@ -1,6 +1,6 @@
 [
   {
-    "name": "${app_name}",
+    "name": "${task_name}",
     "image": "${app_image}",
     "memory": ${fargate_memory},
     "cpu": ${fargate_cpu},
@@ -8,9 +8,9 @@
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "${app_name}-log-group",
+        "awslogs-group": "${task_name}-log-group",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "${app_name}-log-stream"
+        "awslogs-stream-prefix": "${task_name}-log-stream"
       }
     },
     "linuxParameters": {
