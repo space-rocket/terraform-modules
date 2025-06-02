@@ -28,7 +28,7 @@ resource "aws_codebuild_project" "deploy" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = local.log-group
+      group_name  = local.log_group_name
       stream_name = local.task_name
     }
 
