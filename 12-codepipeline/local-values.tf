@@ -6,7 +6,7 @@ locals {
   # app_name                   = var.app_name
   task_name                  = var.task_name
   region                     = var.region
-  name                       = "${var.project}-${var.env}-${var.app_name}"
+  # name                       = "${var.project}-${var.env}-${var.app_name}"
   git_repo                   = var.git_repo
   git_branch                 = var.git_branch
   ecs_cluster_name           = var.ecs_cluster_name

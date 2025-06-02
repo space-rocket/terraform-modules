@@ -1,6 +1,6 @@
 resource "aws_codebuild_project" "build" {
-  name          = "${local.name}-codebuild-build-project"
-  description   = "${local.name} Codebuild Build Project"
+  name          = "${local.task_name}-codebuild-build-project"
+  description   = "${local.task_name} Codebuild Build Project"
   build_timeout = 5
   service_role  = aws_iam_role.code_build_role.arn
 

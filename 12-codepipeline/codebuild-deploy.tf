@@ -1,6 +1,6 @@
 resource "aws_codebuild_project" "deploy" {
-  name          = "${local.name}-codebuild-deploy-project"
-  description   = "${local.name} Codebuild Deploy Project"
+  name          = "${local.task_name}-codebuild-deploy-project"
+  description   = "${local.task_name} Codebuild Deploy Project"
   build_timeout = 5
   service_role  = aws_iam_role.code_build_role.arn
 
@@ -59,11 +59,11 @@ resource "aws_codebuild_project" "deploy" {
             - echo 👍 IMAGE_TAG $IMAGE_TAG
             - |
               aws ecs register-task-definition \
-                --family "${local.name}-family" \
+                --family "${local.task_name}-family" \
                 --task-role-arn arn:aws:iam::${local.account_id}:role/${local.fargate_ecs_task_role} \
                 --execution-role-arn ${local.fargate_ecs_execution_role} \
                 --container-definitions '[{
-                    "name": "${local.name}-container-name",
+                    "name": "${local.task_name}-container-name",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
                     "memory": 512,
                     "cpu": 256,
@@ -96,7 +96,7 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.name}-log-group",
+                            "awslogs-group": "${local.task_name}-log-group",
                             "awslogs-region": "${local.region}",
                             "awslogs-stream-prefix": "${local.task_name}-log-stream"
                         }
@@ -127,7 +127,7 @@ resource "aws_codebuild_project" "deploy" {
                 --cluster ${local.ecs_cluster_name} \
                 --service ${local.ecs_service_name} \
                 --force-new-deployment \
-                --task-definition ${local.name}:$REVISION_NUMBER > ecs-service-update.json
+                --task-definition ${local.task_name}:$REVISION_NUMBER > ecs-service-update.json
         post_build:
           commands:
             - echo "🏁 Post-build phase complete! All artifacts are ready and verified."

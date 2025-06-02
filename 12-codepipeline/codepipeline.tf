@@ -1,5 +1,5 @@
 resource "aws_codepipeline" "codepipeline" {
-  name          = "${local.name}-codepipeline"
+  name          = "${local.task_name}-codepipeline"
   role_arn      = aws_iam_role.codepipeline_role.arn
   pipeline_type = "V2"
 
@@ -46,7 +46,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${local.name}-codebuild-build-project"
+        ProjectName = "${local.task_name}-codebuild-build-project"
       }
     }
   }
@@ -64,7 +64,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${local.name}-codebuild-deploy-project"
+        ProjectName = "${local.task_name}-codebuild-deploy-project"
       }
     }
   }
