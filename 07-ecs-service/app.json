@@ -8,9 +8,9 @@
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "${task_name}-log-group",
+        "awslogs-group": "${log_group_name}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "${task_name}-log-stream"
+        "awslogs-stream-prefix": "${task_name}"
       }
     },
     "linuxParameters": {

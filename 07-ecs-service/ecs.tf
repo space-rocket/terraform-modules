@@ -9,6 +9,7 @@ locals {
     local.app_template_path,
     {
       task_name        = var.task_name
+      log_group_name   = var.log_group_name
       app_image        = var.app_image
       app_port         = var.app_port
       app_env          = var.env

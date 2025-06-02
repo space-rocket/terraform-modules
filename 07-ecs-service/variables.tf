@@ -24,6 +24,11 @@ variable "ecs_execution_role" {
 variable "task_name" {
   type = string
 }
+
+variable "log_group_name" {
+  type = string
+}
+
 variable "app_image" {
   type = string
 }
