@@ -59,7 +59,7 @@ resource "aws_codebuild_project" "deploy" {
             - echo 👍 IMAGE_TAG $IMAGE_TAG
             - |
               aws ecs register-task-definition \
-                --family "${local.task_name}-family" \
+                --family "${local.task_name}" \
                 --task-role-arn arn:aws:iam::${local.account_id}:role/${local.fargate_ecs_task_role} \
                 --execution-role-arn ${local.fargate_ecs_execution_role} \
                 --container-definitions '[{
