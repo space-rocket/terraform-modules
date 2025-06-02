@@ -2,11 +2,11 @@
 # CloudWatch Log Group
 #######################
 resource "aws_cloudwatch_log_group" "fargate_task_log_group" {
-  name              = "${local.log_group_name}"
+  name              = "${var.log_group_name}"
   retention_in_days = 30
 }
 
 resource "aws_cloudwatch_log_stream" "fargate_task_log_stream" {
-  name           = "${local.task_name}"
+  name           = "${var.task_name}"
   log_group_name = aws_cloudwatch_log_group.fargate_task_log_group.name
 }
