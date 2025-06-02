@@ -1,5 +1,5 @@
 resource "aws_codebuild_project" "build" {
-  name          = "${local.task_name}-codebuild-build-project"
+  name          = "${local.task_name}"
   description   = "${local.task_name} Codebuild Build Project"
   build_timeout = 5
   service_role  = aws_iam_role.code_build_role.arn
@@ -32,8 +32,8 @@ resource "aws_codebuild_project" "build" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "log-group-from-build"
-      stream_name = "log-stream-from-build"
+      group_name  = local.log_group_name
+      stream_name = local.task_name
     }
 
     s3_logs {

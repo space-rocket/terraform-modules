@@ -28,8 +28,8 @@ resource "aws_codebuild_project" "deploy" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "log-group-from-deploy"
-      stream_name = "log-stream-from-deploy"
+      group_name  = local.log-group
+      stream_name = local.task_name
     }
 
     s3_logs {
@@ -96,9 +96,9 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.task_name}-log-group",
+                            "awslogs-group": "${local.group_name}",
                             "awslogs-region": "${local.region}",
-                            "awslogs-stream-prefix": "${local.task_name}-log-stream"
+                            "awslogs-stream-prefix": "${local.task_name}"
                         }
                     },
                     "healthCheck": {

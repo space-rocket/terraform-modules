@@ -5,6 +5,7 @@ locals {
   env                        = var.env
   # app_name                   = var.app_name
   task_name                  = var.task_name
+  log_group_name             = var.log_group_name
   region                     = var.region
   # name                       = "${var.project}-${var.env}-${var.app_name}"
   git_repo                   = var.git_repo
