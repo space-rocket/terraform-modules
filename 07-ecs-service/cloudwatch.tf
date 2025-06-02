@@ -2,7 +2,7 @@
 # CloudWatch Log Group
 #######################
 resource "aws_cloudwatch_log_group" "fargate_task_log_group" {
-  name              = "${var.log_group_name}"
+  name              = "${var.log_group_name}/ecs-service"
   retention_in_days = 30
 }
 
