@@ -46,7 +46,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${local.task_name}-codebuild-build-project"
+        ProjectName = "${local.task_name}"
       }
     }
   }
