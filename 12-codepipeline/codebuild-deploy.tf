@@ -59,11 +59,11 @@ resource "aws_codebuild_project" "deploy" {
             - echo 👍 IMAGE_TAG $IMAGE_TAG
             - |
               aws ecs register-task-definition \
-                --family ${local.name} \
+                --family "${local.name}-family" \
                 --task-role-arn arn:aws:iam::${local.account_id}:role/${local.fargate_ecs_task_role} \
                 --execution-role-arn ${local.fargate_ecs_execution_role} \
                 --container-definitions '[{
-                    "name": "${local.name}",
+                    "name": "${local.name}-container-name",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
                     "memory": 512,
                     "cpu": 256,
@@ -96,9 +96,9 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.env}-${local.project}-${local.app_name}-log-group",
+                            "awslogs-group": "${local.name}-log-group",
                             "awslogs-region": "${local.region}",
-                            "awslogs-stream-prefix": "${local.env}-${local.project}-${local.app_name}-log-stream"
+                            "awslogs-stream-prefix": "${local.app_name}-log-stream"
                         }
                     },
                     "healthCheck": {
