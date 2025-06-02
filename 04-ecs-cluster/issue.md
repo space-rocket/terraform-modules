@@ -1,3 +1,5 @@
+**modules/07-ecs-cluster/main.tf**
+```tf
 resource "aws_ecs_cluster" "ecs_app_cluster" {
   name = var.cluster_name_override != "" ? var.cluster_name_override : "${var.env}-${var.project}-ecs-cluster"
   setting {
@@ -38,26 +40,68 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-
 # (Optionally) attach a policy for reading parameters from SSM under the
 # execution role, if you prefer that design
-resource "aws_iam_policy" "ssm_params_policy" {
-  name   = "${var.env}-${var.project}-ssm-params-policy"
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = ["ssm:GetParameters"],
-        Resource = [
-          for prefix in var.ssm_secret_path_prefixes : "${prefix}/*"
-        ]
-      }
-    ]
-  })
+# resource "aws_iam_policy" "ssm_params_policy" {
+#   name   = "${var.env}-${var.project}-ssm-params-policy"
+#   policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Effect = "Allow",
+#         Action = ["ssm:GetParameters"],
+#         Resource = [
+#           for prefix in var.ssm_secret_path_prefixes : "${prefix}/*"
+#         ]
+#       }
+#     ]
+#   })
+# }
+
+# resource "aws_iam_role_policy_attachment" "ssm_params_policy_attachment" {
+#   role       = aws_iam_role.ecs_execution_role.name
+#   policy_arn = aws_iam_policy.ssm_params_policy.arn
+# }```
+
+**modules/07-ecs-cluster/outputs.tf**
+```tf
+output "ecs_cluster_id" {
+  value = aws_ecs_cluster.ecs_app_cluster.id
 }
 
-resource "aws_iam_role_policy_attachment" "ssm_params_policy_attachment" {
-  role       = aws_iam_role.ecs_execution_role.name
-  policy_arn = aws_iam_policy.ssm_params_policy.arn
+output "ecs_cluster_name" {
+  value = aws_ecs_cluster.ecs_app_cluster.name
 }
+
+output "ecs_execution_role_arn" {
+  value = aws_iam_role.ecs_execution_role.arn
+}
+```
+
+**modules/07-ecs-cluster/variables.tf**
+```tf
+variable "account_id" {
+  type = string
+}
+variable "env" {
+  type = string
+}
+variable "project" {
+  type = string
+}
+variable "region" {
+  type = string
+}
+
+variable "ssm_secret_path_prefixes" {
+  description = "List of SSM parameter path prefixes to allow ECS task execution role to read"
+  type        = list(string)
+}
+
+variable "cluster_name_override" {
+  type    = string
+  default = ""
+  description = "Optional override for ECS cluster name"
+}
+```
+
