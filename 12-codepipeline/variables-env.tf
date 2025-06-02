@@ -109,3 +109,12 @@ variable "app_name" {
   type        = string
 }
 
+variable "app_secrets" {
+  description = "List of secret objects with name and valueFrom"
+  type        = list(object({
+    name      = string
+    valueFrom = string
+  }))
+}
+
+

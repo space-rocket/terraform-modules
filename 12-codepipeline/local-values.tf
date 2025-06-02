@@ -15,7 +15,7 @@ locals {
   image_repo                 = var.image_repo
   port                       = var.port
   ssm_secret_path_prefix     = var.ssm_secret_path_prefix
-
+  app_secrets                = var.app_secrets
   common_tags = {
     project     = local.project
     environment = local.environment
