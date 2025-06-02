@@ -96,7 +96,7 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.group_name}",
+                            "awslogs-group": "${local.log_group_name}",
                             "awslogs-region": "${local.region}",
                             "awslogs-stream-prefix": "${local.task_name}"
                         }
