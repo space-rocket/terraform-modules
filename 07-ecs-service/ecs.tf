@@ -4,7 +4,7 @@
 # Template for container definitions
 locals {
   # log_stream_prefix = "${formatdate("yyyy-MM-dd", timestamp())}"
-  log_stream_prefix = "${formatdate("YYYY-MM-DD", timestamp())}"
+  # log_stream_prefix = "${formatdate("YYYY-MM-DD", timestamp())}"
 
   app_template_path = "${path.module}/app.json"
 
@@ -23,7 +23,6 @@ locals {
       fargate_memory   = var.fargate_memory
       app_environments = jsonencode(var.app_environments)
       app_secrets      = jsonencode(var.app_secrets)
-      log_stream_prefix = local.log_stream_prefix
     }
   )
 }
