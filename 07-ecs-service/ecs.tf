@@ -4,7 +4,7 @@
 # Template for container definitions
 locals {
   # log_stream_prefix = "${formatdate("yyyy-MM-dd", timestamp())}"
-  log_stream_prefix = "${formatdate("2006-01-02", timestamp())}"
+  log_stream_prefix = "${formatdate("YYYY-MM-DD", timestamp())}"
 
   app_template_path = "${path.module}/app.json"
 

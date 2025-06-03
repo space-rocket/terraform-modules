@@ -9,8 +9,7 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-group": "${log_group_name}/ecs-service",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "${log_stream_prefix}"
+        "awslogs-region": "${region}"
       }
     },
     "linuxParameters": {
