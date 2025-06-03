@@ -3,6 +3,8 @@
 ########################
 # Template for container definitions
 locals {
+  log_stream_prefix = "${formatdate("yyyy-MM-dd", timestamp())}"
+
   app_template_path = "${path.module}/app.json"
 
   app_config = templatefile(
@@ -20,9 +22,11 @@ locals {
       fargate_memory   = var.fargate_memory
       app_environments = jsonencode(var.app_environments)
       app_secrets      = jsonencode(var.app_secrets)
+      log_stream_prefix = local.log_stream_prefix
     }
   )
 }
+
 
 resource "aws_ecs_task_definition" "app" {
   family                   = var.task_name
