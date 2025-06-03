@@ -29,6 +29,7 @@ resource "aws_codebuild_project" "deploy" {
   logs_config {
     cloudwatch_logs {
       group_name  = "${local.log_group_name}/codebuild/deploy"
+      stream_name = local.log_stream_prefix
     }
 
     s3_logs {
@@ -95,7 +96,7 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.log_group_name}",
+                            "awslogs-group": "${local.log_group_name}/deploy",
                             "awslogs-region": "${local.region}",
                             "awslogs-stream-prefix": "${local.log_stream_prefix}"
                         }

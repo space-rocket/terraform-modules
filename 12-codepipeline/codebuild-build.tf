@@ -33,6 +33,7 @@ resource "aws_codebuild_project" "build" {
   logs_config {
     cloudwatch_logs {
       group_name  = "${local.log_group_name}/codebuild/build"
+      stream_name = local.log_stream_prefix
     }
 
     s3_logs {
