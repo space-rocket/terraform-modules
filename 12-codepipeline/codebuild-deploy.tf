@@ -95,7 +95,7 @@ resource "aws_codebuild_project" "deploy" {
                     "logConfiguration": {
                         "logDriver": "awslogs",
                         "options": {
-                            "awslogs-group": "${local.log_group_name}/deploy",
+                            "awslogs-group": "${local.log_group_name}/codebuild/deploy",
                             "awslogs-region": "${local.region}",
                             "awslogs-stream-prefix": "fargate"
                         }
