@@ -97,7 +97,7 @@ resource "aws_codebuild_project" "deploy" {
                         "options": {
                             "awslogs-group": "${local.log_group_name}",
                             "awslogs-region": "${local.region}",
-                            "awslogs-stream-prefix": "${local.task_name}"
+                            "awslogs-stream-prefix": "${local.log_stream_prefix}"
                         }
                     },
                     "healthCheck": {

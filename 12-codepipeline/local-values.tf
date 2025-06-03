@@ -1,4 +1,5 @@
 locals {
+  log_stream_prefix          = "${formatdate("2006-01-02", timestamp())}"
   account_id                 = var.account_id
   project                    = var.project
   environment                = var.env
