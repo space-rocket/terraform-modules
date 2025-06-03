@@ -28,8 +28,7 @@ resource "aws_codebuild_project" "deploy" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "${local.log_group_name}/codebuild"
-      stream_name = "${local.task_name}-deploy"
+      group_name  = "${local.log_group_name}/codebuild/deploy"
     }
 
     s3_logs {
