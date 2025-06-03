@@ -1,6 +1,6 @@
 [
   {
-    "name": "${task_name}-foo",
+    "name": "${task_name}",
     "image": "${app_image}",
     "memory": ${fargate_memory},
     "cpu": ${fargate_cpu},
@@ -10,7 +10,7 @@
       "options": {
         "awslogs-group": "${log_group_name}/ecs-service",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "${task_name}-bar"
+        "awslogs-stream-prefix": "${task_name}"
       }
     },
     "linuxParameters": {
