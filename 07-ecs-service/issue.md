@@ -8,10 +8,10 @@ resource "aws_cloudwatch_log_group" "fargate_task_log_group" {
   retention_in_days = 30
 }
 
-resource "aws_cloudwatch_log_stream" "fargate_task_log_stream" {
-  name           = "${var.task_name}"
-  log_group_name = aws_cloudwatch_log_group.fargate_task_log_group.name
-}```
+# resource "aws_cloudwatch_log_stream" "fargate_task_log_stream" {
+#   name           = "${var.task_name}"
+#   log_group_name = aws_cloudwatch_log_group.fargate_task_log_group.name
+# }```
 
 **modules/07-ecs-service/ecs.tf**
 ```tf
@@ -20,6 +20,9 @@ resource "aws_cloudwatch_log_stream" "fargate_task_log_stream" {
 ########################
 # Template for container definitions
 locals {
+  # log_stream_prefix = "${formatdate("yyyy-MM-dd", timestamp())}"
+  # log_stream_prefix = "${formatdate("YYYY-MM-DD", timestamp())}"
+
   app_template_path = "${path.module}/app.json"
 
   app_config = templatefile(
@@ -40,6 +43,7 @@ locals {
     }
   )
 }
+
 
 resource "aws_ecs_task_definition" "app" {
   family                   = var.task_name
