@@ -62,3 +62,24 @@ resource "aws_cloudwatch_log_group" "slow_logs" {
   name              = "/aws/opensearch/${var.domain_name}/slow-logs"
   retention_in_days = 30
 }
+
+resource "aws_cloudwatch_log_resource_policy" "opensearch_logs" {
+  policy_name = "OpenSearchLogPolicy"
+  policy_document = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "es.amazonaws.com"
+        },
+        Action = [
+          "logs:PutLogEvents",
+          "logs:CreateLogStream"
+        ],
+        Resource = "${aws_cloudwatch_log_group.slow_logs.arn}:*"
+      }
+    ]
+  })
+}
+
