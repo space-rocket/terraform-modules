@@ -44,7 +44,6 @@ variable "instance_type" {
 }
 
 variable "instance_count" {
-  default     = 1
   description = "Number of OpenSearch data nodes"
 }
 
@@ -68,3 +67,9 @@ variable "admin_email" {
   description = "Admin contact email"
   default     = "ADMIN EMAIL NOT SET!"
 }
+
+variable "my_ip" {
+  description = "Your machine's public IP address for whitelisting access to OpenSearch"
+  type        = string
+}
+
