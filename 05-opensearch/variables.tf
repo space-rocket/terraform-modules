@@ -68,8 +68,3 @@ variable "admin_email" {
   default     = "ADMIN EMAIL NOT SET!"
 }
 
-variable "my_ip" {
-  description = "Your machine's public IP address for whitelisting access to OpenSearch"
-  type        = string
-}
-
