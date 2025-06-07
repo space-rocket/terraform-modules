@@ -1,7 +1,6 @@
 resource "aws_opensearch_domain" "this" {
   domain_name           = var.domain_name
   engine_version        = var.engine_version
-  region                = var.aws_region
 
   cluster_config {
     instance_type  = var.instance_type
