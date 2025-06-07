@@ -62,3 +62,8 @@ variable "volume_type" {
   default     = "gp3"
   description = "EBS volume type"
 }
+
+variable "admin_email" {
+  description = "Administrator contact email"
+  type        = string
+}
