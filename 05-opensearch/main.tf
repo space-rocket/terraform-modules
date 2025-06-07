@@ -1,10 +1,10 @@
 resource "aws_opensearch_domain" "this" {
-  domain_name           = var.domain_name
-  engine_version        = var.engine_version
+  domain_name    = var.domain_name
+  engine_version = var.engine_version
 
   cluster_config {
-    instance_type  = var.instance_type
-    instance_count = var.instance_count
+    instance_type          = var.instance_type
+    instance_count         = var.instance_count
     zone_awareness_enabled = var.zone_awareness_enabled
   }
 
@@ -30,7 +30,7 @@ resource "aws_opensearch_domain" "this" {
   }
 
   domain_endpoint_options {
-    enforce_https = true
+    enforce_https       = true
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
   }
 
@@ -51,9 +51,9 @@ resource "aws_opensearch_domain" "this" {
   }
 
   tags = {
-    Name     = var.domain_name
-    Env      = var.env
-    Project  = var.project
+    Name      = var.domain_name
+    Env       = var.env
+    Project   = var.project
     ManagedBy = "terraform"
   }
 }

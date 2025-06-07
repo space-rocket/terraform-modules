@@ -44,7 +44,7 @@ variable "instance_type" {
 }
 
 variable "instance_count" {
-  default     = 2
+  default     = 1
   description = "Number of OpenSearch data nodes"
 }
 
@@ -64,6 +64,7 @@ variable "volume_type" {
 }
 
 variable "admin_email" {
-  description = "Administrator contact email"
   type        = string
+  description = "Admin contact email"
+  default     = "ADMIN EMAIL NOT SET!"
 }
