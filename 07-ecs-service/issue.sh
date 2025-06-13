@@ -9,36 +9,30 @@ output_file="issue.md"
 # Clear the output file if it already exists
 > "$output_file"
 
-# Loop through .tf files in the current directory
+# Helper function to write a file to the output with proper formatting
+write_file_block() {
+  local file="$1"
+  local lang="$2"
+  echo "**${prefix_path}/${file}**" >> "$output_file"
+  echo "\`\`\`${lang}" >> "$output_file"
+  cat "$file" >> "$output_file"
+  echo '```' >> "$output_file"
+  echo >> "$output_file"
+}
+
+# Process .tf files
 for file in *.tf; do
-  if [ -f "$file" ]; then
-    # Write the file name with prefix to the output file
-    echo "**${prefix_path}/${file}**" >> "$output_file"
-    
-    # Write the code block with cat contents to the output file
-    echo '```tf' >> "$output_file"
-    cat "$file" >> "$output_file"
-    echo '```' >> "$output_file"
-    
-    # Add a newline to separate the sections
-    echo >> "$output_file"
-  fi
+  [ -f "$file" ] && write_file_block "$file" "tf"
 done
 
-# Append content from all .tfvars files with the same formatting
-for tfvars_file in *.tfvars; do
-  if [ -f "$tfvars_file" ]; then
-    # Write the file name with prefix to the output file
-    echo "**${prefix_path}/${tfvars_file}**" >> "$output_file"
-    
-    # Write the code block with cat contents to the output file
-    echo '```tf' >> "$output_file"
-    cat "$tfvars_file" >> "$output_file"
-    echo '```' >> "$output_file"
-    
-    # Add a newline to separate the sections
-    echo >> "$output_file"
-  fi
+# Process .tfvars files
+for file in *.tfvars; do
+  [ -f "$file" ] && write_file_block "$file" "tf"
+done
+
+# Process .json files
+for file in *.json; do
+  [ -f "$file" ] && write_file_block "$file" "json"
 done
 
 echo "Done! Check $output_file for the results."
