@@ -3,9 +3,14 @@ resource "aws_sagemaker_domain" "this" {
   auth_mode   = "IAM"
   subnet_ids  = var.subnet_ids
   vpc_id      = var.vpc_id
-  execution_role_arn = var.execution_role_arn
+
+  default_user_settings {
+    execution_role = var.execution_role_arn
+  }
+
   tags = var.tags
 }
+
 
 resource "aws_sagemaker_user_profile" "this" {
   domain_id         = aws_sagemaker_domain.this.id
