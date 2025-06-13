@@ -4,16 +4,16 @@ This guide outlines how to manually upload a large Elasticsearch/OpenSearch data
 
 ---
 
-## 🔧 Prerequisites
+## Prerequisites
 
-- ✅ A working **OpenSearch VPC domain** with fine-grained access control (FGAC)
-- ✅ An accessible **bastion EC2 instance** in the same VPC/subnet as OpenSearch
-- ✅ Your OpenSearch credentials (`admin` user and password)
-- ✅ The `dump.json` file (exported from your original Elasticsearch)
+- A working **OpenSearch VPC domain** with fine-grained access control (FGAC)
+- An accessible **bastion EC2 instance** in the same VPC/subnet as OpenSearch
+- Your OpenSearch credentials (`admin` user and password)
+- The `dump.json` file (exported from your original Elasticsearch)
 
 ---
 
-## 🧪 1. Validate Access to OpenSearch
+## 1. Validate Access to OpenSearch
 
 SSH into the bastion:
 
@@ -39,7 +39,7 @@ You should see JSON output like:
 
 ---
 
-## 📂 2. Prepare Your Files
+## 2. Prepare Your Files
 
 On your local machine, place the following in a folder:
 
@@ -50,7 +50,7 @@ On your local machine, place the following in a folder:
 
 ---
 
-## 📤 3. Upload Files to Bastion
+## 3. Upload Files to Bastion
 
 ```bash
 scp -i ~/.ssh/<BASTION_KEY>.pem dump.json upload-to-opensearch.sh ec2-user@<BASTION_PUBLIC_IP>:~
@@ -58,7 +58,7 @@ scp -i ~/.ssh/<BASTION_KEY>.pem dump.json upload-to-opensearch.sh ec2-user@<BAST
 
 ---
 
-## 🛠 4. Run the Import Script on Bastion
+## 4. Run the Import Script on Bastion
 
 SSH into the bastion:
 
@@ -81,7 +81,7 @@ Then run:
 
 ---
 
-## ⚙️ Script Overview (`upload-to-opensearch.sh`)
+##  Script Overview (`upload-to-opensearch.sh`)
 
 This script:
 
@@ -96,7 +96,7 @@ You’ll need to customize inside the script:
 
 ---
 
-## ✅ Expected Output
+## Expected Output
 
 ```text
 📦 Converting dump.json to _bulk format...
@@ -109,7 +109,7 @@ You’ll need to customize inside the script:
 
 ---
 
-## 🧼 Optional: Fix Yellow Index Health
+## Optional: Fix Yellow Index Health
 
 If your index shows `yellow` status:
 
@@ -121,7 +121,55 @@ curl -k -u <AUTH> -XPUT https://<OPENSEARCH_VPC_ENDPOINT>/<INDEX_NAME>/_settings
 
 ---
 
-## 📌 Notes
+## Notes
 
 - Ensure the bastion can reach the OpenSearch domain (same VPC, correct SG).
 - Do not expose credentials in source-controlled scripts.
+
+## 4. Access OpenSearch Dashboards via Port Forwarding
+
+Since the OpenSearch domain is VPC-only, you must port forward through the bastion:
+
+```bash
+ssh -i ~/.ssh/dev-dt-bastion-key \
+  -N -L 5601:vpc-es-dev-xxx.us-west-2.es.amazonaws.com:443 \
+  ec2-user@ec2-34xxx.us-west-2.compute.amazonaws.com
+```
+
+Leave this terminal open while accessing Dashboards.
+
+---
+
+### Open in Browser:
+
+Go to:
+
+```
+https://localhost:5601/_dashboards
+```
+
+Log in with:
+
+- Username: `admin`
+- Password: `YourSecurePassword123!`
+
+---
+
+## 5. View Imported Data
+
+Once logged into Dashboards:
+
+1. Go to **Stack Management → Index Patterns**
+2. Click **Create index pattern**
+3. Enter:
+   ```
+   example*
+   ```
+4. Skip time field (if prompted), then click **Create**
+5. Navigate to **Discover** in the left sidebar to view your data
+
+---
+
+## Done
+
+You’ve now imported data and can interact with it through OpenSearch Dashboards securely tunneled through your bastion host.
