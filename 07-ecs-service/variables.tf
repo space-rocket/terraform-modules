@@ -83,3 +83,27 @@ variable "app_secrets" {
   default = []
 }
 
+variable "healthcheck_interval" {
+  type        = number
+  default     = 30
+  description = "Time between health checks (seconds)"
+}
+
+variable "healthcheck_timeout" {
+  type        = number
+  default     = 5
+  description = "Health check timeout duration (seconds)"
+}
+
+variable "healthcheck_retries" {
+  type        = number
+  default     = 3
+  description = "Number of retries before failing"
+}
+
+variable "healthcheck_start_period" {
+  type        = number
+  default     = 30
+  description = "Grace period before ECS starts checking health (seconds)"
+}
+

@@ -11,6 +11,10 @@ locals {
   app_config = templatefile(
     local.app_template_path,
     {
+      healthcheck_interval     = var.healthcheck_interval
+      healthcheck_timeout      = var.healthcheck_timeout
+      healthcheck_retries      = var.healthcheck_retries
+      healthcheck_start_period = var.healthcheck_start_period
       task_name        = var.task_name
       log_group_name   = var.log_group_name
       app_image        = var.app_image
