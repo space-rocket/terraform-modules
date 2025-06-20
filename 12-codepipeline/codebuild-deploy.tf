@@ -102,10 +102,9 @@ resource "aws_codebuild_project" "deploy" {
                     },
                     "healthCheck": {
                         "command": ["CMD-SHELL", "curl -f http://localhost:${local.port}/health || exit 1"],
-                        "interval": 30,
-                        "timeout": 5,
-                        "retries": 3,
-                        "startPeriod": 60
+                        "interval": 60,
+                        "timeout": 10,
+                        "retries": 3
                     },
                     "linuxParameters": {
                         "initProcessEnabled": true
