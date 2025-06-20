@@ -28,9 +28,10 @@
         "CMD-SHELL",
         "curl -f http://localhost:${app_port}/"
         ],
-        "interval": 5,
-        "timeout": 2,
-        "retries": 3
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
     },
     "environment": ${app_environments},
     "secrets": ${app_secrets},

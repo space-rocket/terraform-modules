@@ -104,9 +104,10 @@ resource "aws_codebuild_project" "deploy" {
                         "command": [
                           "CMD-SHELL", 
                           "curl -L -f http://127.0.0.1:${local.port} || exit 1"],
-                        "interval": 10,
-                        "timeout": 2,
-                        "retries": 5
+                        "interval": 30,
+                        "timeout": 5,
+                        "retries": 3,
+                        "startPeriod": 60
                     },
                     "linuxParameters": {
                         "initProcessEnabled": true
