@@ -18,6 +18,9 @@ resource "aws_lb_target_group" "this" {
     unhealthy_threshold = var.health_check_unhealthy_threshold
     matcher             = var.health_check_matcher
   }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_lb_listener_rule" "host" {
