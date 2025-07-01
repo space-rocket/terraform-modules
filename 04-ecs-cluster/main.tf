@@ -63,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "ssm_params_policy_attachment" {
 }
 
 resource "aws_iam_policy" "ecs_execution_ssm_access" {
-  name = "${local.name_prefix}-ecs-execution-ssm"
+  name = "${var.app_name}-ecs-execution-ssm"
 
   policy = jsonencode({
     Version = "2012-10-17",
