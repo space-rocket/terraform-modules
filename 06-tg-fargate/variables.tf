@@ -77,6 +77,11 @@ variable "alarm_sns_topic_name" {
   type = string
 }
 
+variable "alarm_sns_topic_arn" {
+  description = "ARN of the SNS topic for CloudWatch alarms"
+  type        = string
+}
+
 variable "priority" {
   type        = number
   description = "Priority for the listener rule. Must be unique per rule on the same listener."
