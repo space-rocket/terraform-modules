@@ -73,10 +73,6 @@ variable "alb_arn_suffix" {
   type = string
 }
 
-variable "alarm_sns_topic_name" {
-  type = string
-}
-
 variable "alarm_sns_topic_arn" {
   description = "ARN of the SNS topic for CloudWatch alarms"
   type        = string
