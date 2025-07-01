@@ -63,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "ssm_params_policy_attachment" {
 }
 
 resource "aws_iam_policy" "ecs_execution_ssm_access" {
-  name = "${var.app_name}-ecs-execution-ssm"
+  name = "${var.env}-${var.project}-ecs-execution-ssm"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -76,7 +76,9 @@ resource "aws_iam_policy" "ecs_execution_ssm_access" {
           "ssm:GetParameter",
           "ssm:GetParametersByPath"
         ],
-        Resource = format("arn:aws:ssm:%s:%s:parameter%s/*", var.region, var.account_id, var.ssm_secret_path_prefix)
+        Resource = [
+          for prefix in var.ssm_secret_path_prefixes : "${prefix}/*"
+        ]
       }
     ]
   })
