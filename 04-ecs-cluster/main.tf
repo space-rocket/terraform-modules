@@ -76,7 +76,7 @@ resource "aws_iam_policy" "ecs_execution_ssm_access" {
           "ssm:GetParameter",
           "ssm:GetParametersByPath"
         ],
-        Resource = format("arn:aws:ssm:%s:%s:parameter%s/*", var.region, var.account_id, var.path_prefix)
+        Resource = format("arn:aws:ssm:%s:%s:parameter%s/*", var.region, var.account_id, var.ssm_secret_path_prefix)
       }
     ]
   })
