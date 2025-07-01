@@ -14,5 +14,5 @@ resource "aws_cloudwatch_metric_alarm" "unhealthy_instance_count" {
     TargetGroup  = aws_lb_target_group.this.arn_suffix
   }
 
-  alarm_actions = [data.aws_sns_topic.alarm_topic.arn]
+  alarm_actions = [var.alarm_sns_topic_arn]
 }
