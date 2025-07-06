@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "codebuild_assume_role" {
 }
 
 resource "aws_iam_role" "code_build_role" {
-  name               = "${local.task_name}-codebuild-role"
+  name               = "${local.env}-${local.task_name}-codebuild-role"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role.json
 }
 

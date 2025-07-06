@@ -2,7 +2,7 @@
 # IAM Role for the Task
 #######################
 resource "aws_iam_role" "ecs_task_role" {
-  name               = "${var.task_name}-fargate-ecs-task-role"
+  name               = "${var.env}-${var.task_name}-fargate-ecs-task-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.ecs_task_role_policy.json
 }
@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "ecs_task_role_policy" {
 
 # Example: attach a Secrets Manager policy so this task can read secrets:
 resource "aws_iam_policy" "secrets_manager_policy" {
-  name   = "${var.task_name}-secrets-manager-policy"
+  name   = "${var.env}-${var.task_name}-secrets-manager-policy"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "ecs_exec_policy_attachment" {
 
 # Example SQS policy
 resource "aws_iam_policy" "sqs_policy" {
-  name   = "${var.task_name}-sqs-policy"
+  name   = "${var.env}-${var.task_name}-sqs-policy"
   policy = <<EOF
 {
   "Version": "2012-10-17",

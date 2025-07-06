@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "${local.task_name}-codepipeline"
+  bucket = "${local.env}-${local.task_name}-codepipeline"
 }
 
 resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
