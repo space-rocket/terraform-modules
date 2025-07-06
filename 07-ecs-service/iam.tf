@@ -41,7 +41,7 @@ resource "aws_iam_role_policy_attachment" "secrets_manager_policy_attachment" {
 
 # ECS Exec policy
 resource "aws_iam_policy" "ecs_exec_policy" {
-  name   = "${var.project}-${var.task_name}-ecs-exec-policy"
+  name   = "${var.env}-${var.task_name}-ecs-exec-policy"
   policy = <<EOF
 {
   "Version": "2012-10-17",
