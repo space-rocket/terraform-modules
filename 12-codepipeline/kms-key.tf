@@ -5,7 +5,7 @@ resource "aws_kms_key" "s3kmskey" {
 }
 
 resource "aws_kms_alias" "s3kmskey" {
-  name          = "alias/${local.task_name}-kms-key"
+  name          = "alias/${local.env}-${local.task_name}-kms-key"
   target_key_id = aws_kms_key.s3kmskey.id
 }
 

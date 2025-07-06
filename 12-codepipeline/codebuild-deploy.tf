@@ -1,6 +1,6 @@
 resource "aws_codebuild_project" "deploy" {
-  name          = "${local.task_name}-codebuild-deploy-project"
-  description   = "${local.task_name} Codebuild Deploy Project"
+  name          = "${local.env}-${local.task_name}-codebuild-deploy-project"
+  description   = "${local.env} ${local.task_name} Codebuild Deploy Project"
   build_timeout = 5
   service_role  = aws_iam_role.code_build_role.arn
 
