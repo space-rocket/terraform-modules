@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "bastion_s3_seed_policy" {
-  name = "AllowS3DocdbSeedRead"
+  name = "${var.name_prefix}-AllowS3DocdbSeedRead"
 
   policy = jsonencode({
     Version = "2012-10-17",
