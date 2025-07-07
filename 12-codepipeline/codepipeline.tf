@@ -1,5 +1,5 @@
 resource "aws_codepipeline" "codepipeline" {
-  name          = "${local.env}-${local.task_name}-codepipeline"
+  name          = "${local.task_name}-codepipeline"
   role_arn      = aws_iam_role.codepipeline_role.arn
   pipeline_type = "V2"
 

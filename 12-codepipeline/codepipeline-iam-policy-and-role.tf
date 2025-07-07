@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "codepipeline_assume_role" {
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name               = "${local.env}-${local.task_name}-codepipeline-role"
+  name               = "${local.task_name}-codepipeline-role"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_assume_role.json
 }
 
