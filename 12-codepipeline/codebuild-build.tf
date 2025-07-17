@@ -68,13 +68,7 @@ resource "aws_codebuild_project" "build" {
             - export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
             - echo 👉 IMAGE_TAG $IMAGE_TAG
             - echo 🔍 Detecting system architecture...
-            - |
-              ARCH=$(uname -m)
-              if [ "$ARCH" = "aarch64" ]; then
-                export DOCKER_PLATFORM="linux/arm64"
-              else
-                export DOCKER_PLATFORM="linux/amd64"
-              fi
+            - ARCH=$(uname -m); if [ "$ARCH" = "aarch64" ]; then export DOCKER_PLATFORM="linux/arm64"; else export DOCKER_PLATFORM="linux/amd64"; fi
             - echo 🧠 Target Docker Platform: $DOCKER_PLATFORM
             - echo 🔐 Logging in to Amazon ECR...
             - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
