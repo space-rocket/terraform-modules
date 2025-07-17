@@ -4,9 +4,6 @@ resource "aws_ecs_cluster" "ecs_app_cluster" {
     name  = "containerInsights"
     value = "enabled"
   }
-  lifecycle {
-    ignore_changes = all
-  }
 }
 
 resource "aws_ecs_cluster_capacity_providers" "default" {
