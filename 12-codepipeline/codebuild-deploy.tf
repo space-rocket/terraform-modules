@@ -14,16 +14,15 @@ resource "aws_codebuild_project" "deploy" {
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
+    compute_type                = "BUILD_GENERAL1_MEDIUM"
     image                       = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
-    type                        = "ARM_CONTAINER"
+    type                        = local.codebuild_container_type
     image_pull_credentials_type = "CODEBUILD"
 
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       value = local.account_id
     }
-
   }
 
   logs_config {

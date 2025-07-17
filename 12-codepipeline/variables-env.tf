@@ -126,4 +126,16 @@ variable "app_secrets" {
   }))
 }
 
+variable "codebuild_compute_type" {
+  type        = string
+  description = "CodeBuild compute type"
+  default     = "BUILD_GENERAL1_MEDIUM"
+}
+
+variable "codebuild_image" {
+  type        = string
+  description = "CodeBuild container image"
+  default     = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
+}
+
 

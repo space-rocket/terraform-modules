@@ -13,11 +13,10 @@ resource "aws_codebuild_project" "build" {
     location = aws_s3_bucket.codepipeline_bucket.bucket
   }
 
-  # TODO Make `BUILD_GENERAL1_MEDIUM` a variable
   environment {
     compute_type                = "BUILD_GENERAL1_MEDIUM"
     image                       = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
-    type                        = "ARM_CONTAINER"
+    type                        = local.codebuild_container_type
     image_pull_credentials_type = "CODEBUILD"
 
     environment_variable {

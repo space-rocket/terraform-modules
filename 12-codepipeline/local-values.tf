@@ -23,4 +23,7 @@ locals {
     project     = local.project
     environment = local.environment
   }
+  codebuild_compute_type    = var.codebuild_compute_type
+  codebuild_image           = var.codebuild_image
+  codebuild_container_type  = contains(var.codebuild_image, "aarch64") ? "ARM_CONTAINER" : "LINUX_CONTAINER"
 }
