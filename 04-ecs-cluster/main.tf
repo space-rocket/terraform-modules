@@ -5,10 +5,7 @@ resource "aws_ecs_cluster" "ecs_app_cluster" {
     value = "enabled"
   }
   lifecycle {
-    ignore_changes = [
-      capacity_providers,
-      default_capacity_provider_strategy
-    ]
+    ignore_changes = all
   }
 }
 
