@@ -13,6 +13,7 @@ resource "aws_codebuild_project" "build" {
     location = aws_s3_bucket.codepipeline_bucket.bucket
   }
 
+  # TODO Make `BUILD_GENERAL1_MEDIUM` a variable
   environment {
     compute_type                = "BUILD_GENERAL1_MEDIUM"
     image                       = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
@@ -45,13 +46,11 @@ resource "aws_codebuild_project" "build" {
     type      = "CODEPIPELINE"
     buildspec = <<-EOT
       version: 0.2
-
       env:
         variables:
           AWS_REGION: "${local.region}"
           S3_BUCKET: ""
           S3_KEY: ""
-
       phases:
         install:
           commands:
@@ -67,26 +66,26 @@ resource "aws_codebuild_project" "build" {
             - echo 👉 COMMIT_ID $CODEBUILD_RESOLVED_SOURCE_VERSION
             - export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
             - echo 👉 IMAGE_TAG $IMAGE_TAG
-            - echo 🔍 Detecting system architecture...
-            - ARCH=$(uname -m); if [ "$ARCH" = "aarch64" ]; then export DOCKER_PLATFORM="linux/arm64"; else export DOCKER_PLATFORM="linux/amd64"; fi
-            - echo 🧠 Target Docker Platform: $DOCKER_PLATFORM
-            - echo 🔐 Logging in to Amazon ECR...
+            - echo Logging in to Amazon ECR...
             - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
         build:
           commands:
             - echo "🚀 Starting build phase..."
-            - docker buildx build --platform $DOCKER_PLATFORM -t $IMAGE_REPO_NAME:$IMAGE_TAG --push .
+            - echo Building the Docker image...
+            - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+            - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
         post_build:
           commands:
-            - echo "🏁 Post-build phase complete!"
-            - echo ✅ Build completed on `date`
-            - echo 💧 Image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+            - echo "🏁 Post-build phase complete! All artifacts are ready and verified."
+            - echo Build completed on `date`
+            - echo Pushing the Docker image...
+            - echo 💧
+            - echo $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+            - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
             - echo $IMAGE_TAG > image_tag.txt
-
       artifacts:
         files:
           - image_tag.txt
-
 
     EOT
   }
