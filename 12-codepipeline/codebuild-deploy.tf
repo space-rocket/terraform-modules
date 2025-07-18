@@ -68,8 +68,8 @@ resource "aws_codebuild_project" "deploy" {
                 --container-definitions '[{
                     "name": "${local.task_name}",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
-                    "memory": "${local.fargate_memory}",
-                    "cpu": "${local.fargate_cpu}",
+                    "memory": ${local.fargate_memory},
+                    "cpu": ${local.fargate_cpu},
                     "essential": true,
                     "portMappings": [
                         {
