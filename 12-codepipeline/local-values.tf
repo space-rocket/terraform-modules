@@ -25,5 +25,5 @@ locals {
   }
   codebuild_compute_type    = var.codebuild_compute_type
   codebuild_image           = var.codebuild_image
-  codebuild_container_type = can(regex("aarch64", var.codebuild_image)) ? "ARM_CONTAINER" : "LINUX_CONTAINER"
+  codebuild_type = can(regex("aarch64", var.codebuild_image)) ? "ARM_CONTAINER" : "LINUX_CONTAINER"
 }
