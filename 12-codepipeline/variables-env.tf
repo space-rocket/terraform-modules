@@ -141,13 +141,13 @@ variable "codebuild_image" {
 
 variable "fargate_cpu" {
   description = "Fargate CPU"
-  type        = string
-  default     = 256
+  type        = number
+  # default     = 256
 }
 
 variable "fargate_memory" {
   description = "Fargate Memory"
-  type        = string
-  default     = 512
+  type        = number
+  # default     = 512
 }
 
