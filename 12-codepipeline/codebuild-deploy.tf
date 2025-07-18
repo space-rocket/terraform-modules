@@ -14,14 +14,19 @@ resource "aws_codebuild_project" "deploy" {
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_MEDIUM"
-    image                       = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
-    type                        = local.codebuild_container_type
+    compute_type = local.codebuild_compute_type
+    image        = local.codebuild_image
+    type         = local.codebuild_type
     image_pull_credentials_type = "CODEBUILD"
 
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       value = local.account_id
+    }
+
+    environment_variable {
+      name  = "IMAGE_REPO_NAME"
+      value = local.image_repo
     }
   }
 
