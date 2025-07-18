@@ -107,3 +107,8 @@ variable "healthcheck_start_period" {
   description = "Grace period before ECS starts checking health (seconds)"
 }
 
+variable "app_name" {
+  description = "The name of the application"
+  type        = string
+}
+
