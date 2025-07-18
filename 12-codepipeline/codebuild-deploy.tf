@@ -68,8 +68,6 @@ resource "aws_codebuild_project" "deploy" {
                 --container-definitions '[{
                     "name": "${local.task_name}",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
-                    "memory": 512,
-                    "cpu": 256,
                     "essential": true,
                     "portMappings": [
                         {
