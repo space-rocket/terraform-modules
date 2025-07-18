@@ -54,7 +54,7 @@ resource "aws_codebuild_project" "build" {
       phases:
         install:
           commands:
-            - echo ✅ Begin install phase
+            - echo ✅ Begin install phase 1
             - echo Installing Docker Buildx...
             - docker buildx create --use
             - docker buildx inspect --bootstrap
