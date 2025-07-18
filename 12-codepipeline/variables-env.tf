@@ -104,10 +104,11 @@ variable "fargate_ecs_execution_role" {
   type        = string
 }
 
-# variable "app_name" {
-#   description = "Application name used in CodePipeline and tagging"
-#   type        = string
-# }
+variable "app_name" {
+  description = "Application name used in CodePipeline and tagging"
+  type        = string
+  default     = "api"
+}
 
 variable "task_name" {
   description = "Application name used in CodePipeline and tagging"
@@ -138,4 +139,15 @@ variable "codebuild_image" {
   default     = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
 }
 
+variable "fargate_cpu" {
+  description = "Fargate CPU"
+  type        = string
+  default     = 256
+}
+
+variable "fargate_cpu" {
+  description = "Fargate Memory"
+  type        = string
+  default     = 512
+}
 

@@ -68,8 +68,8 @@ resource "aws_codebuild_project" "deploy" {
                 --container-definitions '[{
                     "name": "${local.task_name}",
                     "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${local.image_repo}:'$IMAGE_TAG'",
-                    "memory": "${local.codebuild_compute_type}",
-                    "cpu": "${local.codebuild_image}",
+                    "memory": "${local.fargate_memory}",
+                    "cpu": "${local.fargate_cpu}",
                     "essential": true,
                     "portMappings": [
                         {
@@ -101,7 +101,7 @@ resource "aws_codebuild_project" "deploy" {
                         "options": {
                             "awslogs-group": "${local.log_group_name}/codebuild/deploy",
                             "awslogs-region": "${local.region}",
-                            "awslogs-stream-prefix": "api"
+                            "awslogs-stream-prefix": "${local.app_name}"
                         }
                     },
                     "healthCheck": {
@@ -116,8 +116,8 @@ resource "aws_codebuild_project" "deploy" {
                 }]' \
                 --network-mode awsvpc \
                 --requires-compatibilities FARGATE \
-                --cpu "${local.codebuild_compute_type}" \
-                --memory "${local.codebuild_image}" \
+                --cpu ${local.fargate_cpu} \
+                --memory ${local.fargate_memory} \
                 --runtime-platform "{\"cpuArchitecture\": \"ARM64\", \"operatingSystemFamily\": \"LINUX\"}" > ecs-task-definition.json
             - REVISION_NUMBER=$(jq -r '.taskDefinition.revision' ecs-task-definition.json)
         build:

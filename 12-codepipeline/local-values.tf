@@ -13,6 +13,8 @@ locals {
   git_branch                 = var.git_branch
   ecs_cluster_name           = var.ecs_cluster_name
   ecs_service_name           = var.ecs_service_name
+  fargate_cpu                = var.fargate_cpu
+  fargate_memory             = var.fargate_memory
   fargate_ecs_task_role      = var.fargate_ecs_task_role
   fargate_ecs_execution_role = var.fargate_ecs_execution_role
   image_repo                 = var.image_repo
