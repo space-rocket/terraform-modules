@@ -145,7 +145,7 @@ variable "fargate_cpu" {
   default     = 256
 }
 
-variable "fargate_cpu" {
+variable "fargate_memory" {
   description = "Fargate Memory"
   type        = string
   default     = 512
