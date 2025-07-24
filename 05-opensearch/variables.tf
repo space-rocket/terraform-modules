@@ -68,3 +68,8 @@ variable "admin_email" {
   default     = "ADMIN EMAIL NOT SET!"
 }
 
+variable "snapshot_bucket_name" {
+  description = "Name of the S3 bucket where OpenSearch snapshots will be stored or restored from"
+  type        = string
+}
+

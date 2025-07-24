@@ -83,3 +83,49 @@ resource "aws_cloudwatch_log_resource_policy" "opensearch_logs" {
   })
 }
 
+resource "aws_iam_role" "snapshot_access" {
+  name = "${var.domain_name}-snapshot-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "es.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "snapshot_access" {
+  name = "${var.domain_name}-snapshot-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid: "AllowSnapshotBucketAccess",
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "arn:aws:s3:::${var.snapshot_bucket_name}",
+          "arn:aws:s3:::${var.snapshot_bucket_name}/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "snapshot" {
+  role       = aws_iam_role.snapshot_access.name
+  policy_arn = aws_iam_policy.snapshot_access.arn
+}
+
