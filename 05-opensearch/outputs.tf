@@ -20,3 +20,7 @@ output "snapshot_policy_arn" {
   value       = aws_iam_policy.snapshot_access.arn
 }
 
+output "security_group_ids" {
+  value = var.sg_ids
+}
+
