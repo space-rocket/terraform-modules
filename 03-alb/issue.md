@@ -1,17 +1,17 @@
 **acm.tf**
 ```tf
-# data "aws_acm_certificate" "main" {
-#   domain      = var.main_domain
-#   statuses    = ["ISSUED"]
-#   most_recent = true
-# }
+data "aws_acm_certificate" "main" {
+  domain      = var.main_domain
+  statuses    = ["ISSUED"]
+  most_recent = true
+}
 
-# data "aws_acm_certificate" "additional" {
-#   for_each    = toset(var.additional_domains)
-#   domain      = each.key
-#   statuses    = ["ISSUED"]
-#   most_recent = true
-# }
+data "aws_acm_certificate" "additional" {
+  for_each    = toset(var.additional_domains)
+  domain      = each.key
+  statuses    = ["ISSUED"]
+  most_recent = true
+}
 ```
 
 **alb_alarms.tf**
@@ -66,6 +66,10 @@ resource "aws_lb" "this" {
     prefix  = var.logs_prefix
   }
 
+  depends_on = [
+    aws_s3_bucket_policy.alb_logs
+  ]
+  
   tags = local.common_tags
 }
 
@@ -147,6 +151,21 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
   }
 }
 
+# resource "aws_s3_bucket_lifecycle_configuration" "logs" {
+#   count = var.logs_bucket == null ? 0 : 1
+
+#   bucket = aws_s3_bucket.logs[0].id
+
+#   rule {
+#     id      = "delete"
+#     status  = "Enabled"
+
+#     expiration {
+#       days = var.logs_expiration
+#     }
+#   }
+# }
+
 resource "aws_s3_bucket_lifecycle_configuration" "logs" {
   count = var.logs_bucket == null ? 0 : 1
 
@@ -155,6 +174,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs" {
   rule {
     id      = "delete"
     status  = "Enabled"
+
+    prefix  = "main/AWSLogs/${var.account_id}/"
 
     expiration {
       days = var.logs_expiration
@@ -185,70 +206,55 @@ data "aws_iam_policy_document" "alb_logs_s3" {
   count = var.logs_bucket == null ? 0 : 1
 
   statement {
-    sid = "AlbS301"
-
-    actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"]
+    sid    = "AllowALBLogDeliveryPut"
+    effect = "Allow"
 
     principals {
-      identifiers = ["arn:aws:iam::${local.lb_account_id}:root"]
-      type        = "AWS"
-    }
-  }
-
-  statement {
-    sid = "AlbS302"
-
-    actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"]
-
-    principals {
-      identifiers = ["delivery.logs.amazonaws.com"]
       type        = "Service"
+      identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
     }
-  }
-
-  statement {
-    sid = "AlbS303"
-
-    actions   = ["s3:GetBucketAcl"]
-    resources = [aws_s3_bucket.logs[0].arn]
-
-    principals {
-      identifiers = ["delivery.logs.amazonaws.com"]
-      type        = "Service"
-    }
-  }
-
-  statement {
-    sid = "AllowALBAccess"
 
     actions = ["s3:PutObject"]
     resources = [
       "${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"
     ]
 
-    principals {
-      identifiers = ["elasticloadbalancing.amazonaws.com"]
-      type        = "Service"
-    }
-  }
-
-  statement {
-    sid = "AllowLogsDelivery"
-    actions = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"]
-
-    principals {
-      identifiers = ["delivery.logs.amazonaws.com"]
-      type        = "Service"
-    }
-
     condition {
       test     = "StringEquals"
       variable = "s3:x-amz-acl"
       values   = ["bucket-owner-full-control"]
     }
+  }
+
+  statement {
+    sid    = "AllowALBLogDeliveryGetAcl"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
+    }
+
+    actions   = ["s3:GetBucketAcl"]
+    resources = [aws_s3_bucket.logs[0].arn]
+  }
+
+  statement {
+    sid    = "AllowBucketOwnerFullControl"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.account_id]
+    }
+
+    actions   = [
+      "s3:PutObject",
+      "s3:GetObject"
+    ] 
+    resources = [
+      "${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"
+    ]
   }
 }
 
@@ -296,7 +302,7 @@ locals {
   ])
 
   alias_fqdns_with_zones = {
-    for alias in var.create_aliases : format("%s.%s", alias["name"], alias["zone"]) => alias["zone"]
+    for alias in var.create_aliases : alias["name"] => alias["zone"]
   }
 }
 
