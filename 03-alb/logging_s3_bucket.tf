@@ -90,7 +90,10 @@ data "aws_iam_policy_document" "alb_logs_s3" {
       identifiers = [var.account_id]
     }
 
-    actions   = ["s3:PutObject"]
+    actions   = [
+      "s3:PutObject",
+      "s3:GetObject"
+    ] 
     resources = [
       "${aws_s3_bucket.logs[0].arn}/${var.logs_prefix}/AWSLogs/${var.account_id}/*"
     ]
