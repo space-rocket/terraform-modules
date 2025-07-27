@@ -1,4 +1,4 @@
-resource "aws_iam_policy" "bastion_s3_seed_policy" {
+resource "aws_iam_policy" "ec2_instance_s3_seed_policy" {
   name = "${var.name_prefix}-AllowS3DocdbSeedRead"
 
   policy = jsonencode({

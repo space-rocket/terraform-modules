@@ -1,5 +1,5 @@
-resource "aws_security_group" "bastion" {
-  name        = "${var.name_prefix}-bastion-sg"
+resource "aws_security_group" "ec2_instance" {
+  name        = "${var.name_prefix}-ec2_instance-sg"
   description = "Allow SSH from my IP"
   vpc_id      = var.vpc_id
 
@@ -21,17 +21,17 @@ resource "aws_security_group" "bastion" {
   tags = var.tags
 }
 
-resource "aws_instance" "bastion" {
+resource "aws_instance" "ec2_instance" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
   subnet_id              = element(var.subnet_ids, 0)
-  vpc_security_group_ids = [aws_security_group.bastion.id]
+  vpc_security_group_ids = [aws_security_group.ec2_instance.id]
   key_name               = var.key_name
 
   associate_public_ip_address = true
   user_data                   = var.user_data
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-bastion"
+    Name = "${var.name_prefix}-ec2_instance"
   })
 }
