@@ -8,7 +8,7 @@ variable "project" {
   type        = string
 }
 
-variable "name_prefix" {
+variable "instance_name" {
   description = "Prefix for naming resources"
   type        = string
 }

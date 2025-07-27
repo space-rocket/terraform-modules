@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "ec2_instance_s3_seed_policy" {
-  name = "${var.name_prefix}-AllowS3DocdbSeedRead"
+  name = "${var.instance_name}-AllowS3DocdbSeedRead"
 
   policy = jsonencode({
     Version = "2012-10-17",

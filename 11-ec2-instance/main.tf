@@ -1,5 +1,5 @@
 resource "aws_security_group" "ec2_instance" {
-  name        = "${var.name_prefix}-ec2_instance-sg"
+  name        = "${var.instance_name}-ec2_instance-sg"
   description = "Allow SSH from my IP"
   vpc_id      = var.vpc_id
 
@@ -32,6 +32,6 @@ resource "aws_instance" "ec2_instance" {
   user_data                   = var.user_data
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-ec2_instance"
+    Name = "${var.instance_name}-ec2_instance"
   })
 }
