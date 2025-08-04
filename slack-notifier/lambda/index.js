@@ -2,12 +2,10 @@ const https = require('https');
 const url = require('url');
 
 exports.handler = async (event) => {
-  console.log("Received event:", JSON.stringify(event, null, 2));
-
   const message = JSON.parse(event.Records[0].Sns.Message);
-  const pipeline = message.detail.pipeline || "unknown";
-  const state = message.detail.state || "unknown";
-  const executionId = message.detail["execution-id"] || "n/a";
+  const pipeline = message.detail.pipeline || "Unknown";
+  const state = message.detail.state || "Unknown";
+  const executionId = message.detail["execution-id"] || "N/A";
   const region = message.region || "us-east-1";
 
   const slackMessage = {
