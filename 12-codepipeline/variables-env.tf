@@ -151,3 +151,8 @@ variable "fargate_memory" {
   # default     = 512
 }
 
+variable "sns_topic_arn" {
+  description = "SNS topic ARN to send pipeline notifications"
+  type        = string
+}
+
