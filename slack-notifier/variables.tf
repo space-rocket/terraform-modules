@@ -1,11 +1,14 @@
 variable "slack_webhook_url" {
-  type = string
+  description = "The full Slack incoming webhook URL"
+  type        = string
 }
 
 variable "sns_topic_arn" {
-  type = string
+  description = "SNS Topic ARN to subscribe Lambda to"
+  type        = string
 }
 
 variable "name_prefix" {
-  type = string
+  description = "Prefix for naming Lambda function and resources"
+  type        = string
 }
