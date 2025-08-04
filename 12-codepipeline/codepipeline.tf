@@ -69,3 +69,21 @@ resource "aws_codepipeline" "codepipeline" {
     }
   }
 }
+
+resource "aws_cloudwatch_event_rule" "pipeline_events" {
+  name        = "${local.task_name}-pipeline-events"
+  description = "Capture CodePipeline execution state changes"
+  event_pattern = jsonencode({
+    source = ["aws.codepipeline"],
+    detail-type = ["CodePipeline Pipeline Execution State Change"],
+    detail = {
+      pipeline = [aws_codepipeline.codepipeline.name]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "sns_target" {
+  rule      = aws_cloudwatch_event_rule.pipeline_events.name
+  arn       = var.sns_topic_arn
+}
+
