@@ -31,6 +31,11 @@ resource "aws_instance" "ec2_instance" {
   associate_public_ip_address = true
   user_data                   = var.user_data
 
+  root_block_device {
+    volume_size = var.root_volume_size_gb
+    volume_type = var.root_volume_type
+  }
+  
   tags = merge(var.tags, {
     Name = "${var.instance_name}-ec2_instance"
   })

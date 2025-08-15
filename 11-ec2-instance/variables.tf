@@ -59,3 +59,16 @@ variable "user_data" {
   type        = string
   default     = ""
 }
+
+variable "root_volume_size_gb" {
+  description = "Root EBS volume size in GB"
+  type        = number
+  default     = 50
+}
+
+variable "root_volume_type" {
+  description = "Root EBS volume type"
+  type        = string
+  default     = "gp3"
+}
+
