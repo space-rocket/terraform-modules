@@ -8,9 +8,8 @@ locals {
   region                     = var.region
   git_repo                   = var.git_repo
   git_branch                 = var.git_branch
-  ecs_cluster_name           = var.ecs_cluster_name
   image_repo                 = var.image_repo
-  
+  task_name                  = var.task_name
   ssm_secret_path_prefix     = var.ssm_secret_path_prefix
   app_secrets                = var.app_secrets
   common_tags = {
