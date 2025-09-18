@@ -19,12 +19,6 @@ variable "git_repo" {
   default     = "Spoon/Knife"
 }
 
-variable "port" {
-  description = "The port the backend service listens on, ex: 5000"
-  type        = number
-  default     = 5000
-}
-
 variable "image_repo" {
   description = "The ecr repo, ex: Spoon/Knife"
   type        = string
@@ -41,6 +35,17 @@ variable "region" {
 
 variable "ssm_secret_path_prefix" {
   description = "Prefix for retrieving secrets from SSM"
+  type        = string
+}
+
+variable "app_name" {
+  description = "Application name used in CodePipeline and tagging"
+  type        = string
+  default     = "api"
+}
+
+variable "task_name" {
+  description = "Application name used in CodePipeline and tagging"
   type        = string
 }
 
