@@ -1,25 +1,8 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
-
 locals {
   cluster_identifier = "${var.name_prefix}-docdb-cluster"
 }
 
-resource "aws_docdb_subnet_group" "this" {
-  name       = "${var.name_prefix}-docdb-subnet-group"
-  subnet_ids = var.subnet_ids
-
-  tags = merge(var.tags, {
-    Name = "${var.name_prefix}-docdb-subnet-group"
-  })
-}
-
-# Fresh create path (when no snapshot is provided)
+# Fresh create if no snapshot
 resource "aws_docdb_cluster" "fresh" {
   count                   = var.snapshot_identifier == null ? 1 : 0
   cluster_identifier      = local.cluster_identifier
@@ -37,7 +20,7 @@ resource "aws_docdb_cluster" "fresh" {
   })
 }
 
-# Restore path (when snapshot is provided)
+# Restore from snapshot if snapshot_identifier is set
 resource "aws_docdb_cluster" "restore" {
   count                  = var.snapshot_identifier != null ? 1 : 0
   cluster_identifier     = local.cluster_identifier
@@ -51,21 +34,21 @@ resource "aws_docdb_cluster" "restore" {
   })
 }
 
-# Choose the active cluster for references
+# Pick whichever cluster got created
 locals {
-  cluster_id      = try(aws_docdb_cluster.fresh[0].id, aws_docdb_cluster.restore[0].id)
-  cluster_endpoint = try(aws_docdb_cluster.fresh[0].endpoint, aws_docdb_cluster.restore[0].endpoint)
-  reader_endpoint  = try(aws_docdb_cluster.fresh[0].reader_endpoint, aws_docdb_cluster.restore[0].reader_endpoint)
+  active_cluster_id      = try(aws_docdb_cluster.fresh[0].id, aws_docdb_cluster.restore[0].id)
+  active_cluster_endpoint = try(aws_docdb_cluster.fresh[0].endpoint, aws_docdb_cluster.restore[0].endpoint)
+  active_reader_endpoint  = try(aws_docdb_cluster.fresh[0].reader_endpoint, aws_docdb_cluster.restore[0].reader_endpoint)
 }
 
 resource "aws_docdb_cluster_instance" "this" {
   count              = var.instance_count
-  identifier         = "${local.cluster_id}-${count.index + 1}"
-  cluster_identifier = local.cluster_id
+  identifier         = "${local.active_cluster_id}-${count.index + 1}"
+  cluster_identifier = local.active_cluster_id
   instance_class     = var.instance_class
   apply_immediately  = true
 
   tags = merge(var.tags, {
-    Name = "${local.cluster_id}-${count.index + 1}"
+    Name = "${local.active_cluster_id}-${count.index + 1}"
   })
 }
