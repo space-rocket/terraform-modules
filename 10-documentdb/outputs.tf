@@ -1,16 +1,16 @@
 output "cluster_endpoint" {
   description = "DocumentDB cluster writer endpoint"
-  value       = local.endpoint
+  value       = local.active_cluster_endpoint
 }
 
 output "reader_endpoint" {
   description = "DocumentDB reader endpoint"
-  value       = local.reader_endpoint
+  value       = local.active_reader_endpoint
 }
 
 output "cluster_id" {
   description = "DocumentDB cluster ID"
-  value       = local.cluster_id
+  value       = local.active_cluster_id
 }
 
 output "security_group_id" {
@@ -18,14 +18,13 @@ output "security_group_id" {
   value       = aws_security_group.docdb.id
 }
 
-# These are meaningful only when creating fresh
 output "master_username" {
-  description = "Master username (fresh create path)"
+  description = "Master username when creating fresh"
   value       = var.master_username
 }
 
 output "master_password" {
-  description = "Master password (fresh create path)"
+  description = "Master password when creating fresh"
   value       = var.master_password
   sensitive   = true
 }

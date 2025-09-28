@@ -3,6 +3,11 @@ variable "name_prefix" {
   type        = string
 }
 
+variable "vpc_id" {
+  description = "VPC where DocDB will live"
+  type        = string
+}
+
 variable "subnet_ids" {
   description = "List of private subnet IDs for the DB subnet group"
   type        = list(string)
